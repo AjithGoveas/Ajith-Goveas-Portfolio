@@ -19,8 +19,6 @@ portfolio-website/
 │   │-- components/ # Reusable UI components
 │   │-- pages/      # Website sections (Home, About, Projects, Contact)
 │   │-- assets/     # Images and icons
-│   │-- data/       # Dynamic content storage (temporary JSON-based)
-│-- backend/        # Express server (handles contact form)
 │-- .env            # Environment variables
 │-- package.json    # Dependencies and scripts
 │-- README.md       # Project documentation
@@ -29,7 +27,7 @@ portfolio-website/
 ## 🚀 Getting Started
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/yourusername/your-portfolio.git
+git clone https://github.com/AjithGoveas/Ajith-Goveas-Portfolio.git
 cd your-portfolio
 ```
 

@@ -1,0 +1,27 @@
+/* Load Google Fonts efficiently */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Sofia:wght@400;700&display=swap");
+@import "tailwindcss";
+
+/* Define custom properties */
+:root {
+  --font-poppins: "Poppins", sans-serif;
+  --font-sofia: "Sofia", sans-serif;
+
+  --bg-main: #121212;
+
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  background: var(--bg-main);
+
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+section {
+  padding: 80px 6% 50px;
+  transition: all 0.3s ease;
+}
