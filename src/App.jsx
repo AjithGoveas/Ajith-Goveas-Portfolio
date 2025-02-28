@@ -11,7 +11,7 @@ const App = () => {
   const Name = "Ajith Goveas";
 
   return (
-    <div className="App font-poppins bg-main">
+    <div className="App">
       <Header />
       <Hero name={Name} />
       <Suspense fallback={<div className="text-center">Loading...</div>}>
