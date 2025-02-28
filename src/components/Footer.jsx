@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import smoothScroll from "./SmoothScroll.jsx";
 import {
   BiLogoFacebookCircle,
@@ -5,9 +6,30 @@ import {
   BiLogoInstagram,
   BiLogoLinkedin,
 } from "react-icons/bi";
+import { db } from "../firebaseConfig.js";
+import { doc, getDoc } from "firebase/firestore";
 
 function Footer({ name }) {
   const Name = name;
+
+  const [socialLinks, setSocialLinks] = useState({});
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const docRef = doc(db, "socialLinks", "myLinks"); // Ensure this collection & doc exist in Firebase
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setSocialLinks(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching social links:", error);
+      }
+    };
+
+    fetchLinks();
+  }, []);
 
   return (
     <footer className="footer bottom-0 left-0 w-full px-8 sm:px-12 md:px-16 lg:px-20 py-[2%] bg-neutral-800 text-white">
@@ -18,26 +40,29 @@ function Footer({ name }) {
             myBio
           </h3>
           <p className="text-sm sm:text-base leading-6">
-            Experience the fusion of innovation and comfort with our company,
-            where every booking is the beginning of an unforgettable journey.
+            Bridging creativity and technology, I craft seamless digital
+            experiences that blend innovation with functionality, turning ideas
+            into reality.
           </p>
           <div className="icons mt-4 p-2 flex justify-center md:justify-start space-x-4">
             {[
-              { icon: <BiLogoFacebookCircle />, link: "#" },
-              { icon: <BiLogoInstagram />, link: "#" },
-              { icon: <BiLogoLinkedin />, link: "#" },
-              { icon: <BiLogoGithub />, link: "#" },
-            ].map((item, index) => (
-              <a
-                key={index}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 text-2xl sm:text-3xl transition-all duration-200 ease-in lg:hover:-translate-y-2 lg:hover:text-white"
-              >
-                {item.icon}
-              </a>
-            ))}
+              { icon: <BiLogoFacebookCircle />, link: socialLinks.facebook },
+              { icon: <BiLogoInstagram />, link: socialLinks.instagram },
+              { icon: <BiLogoLinkedin />, link: socialLinks.linkedin },
+              { icon: <BiLogoGithub />, link: socialLinks.github },
+            ]
+              .filter((item) => item.link)
+              .map((item, index) => (
+                <a
+                  key={index}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 text-2xl sm:text-3xl transition-all duration-200 ease-in lg:hover:-translate-y-2 lg:hover:text-white"
+                >
+                  {item.icon}
+                </a>
+              ))}
           </div>
         </div>
 
@@ -55,7 +80,7 @@ function Footer({ name }) {
             ].map((item) => (
               <li key={item.id}>
                 <a
-                  onClick={() => smoothScroll(item.id)}
+                  onClick={(e) => smoothScroll(item.id, e)}
                   className="text-gray-300 hover:text-white cursor-pointer text-sm sm:text-base"
                 >
                   {item.name}

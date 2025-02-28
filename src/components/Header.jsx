@@ -7,18 +7,18 @@ function Header() {
   const [activeSection, setActiveSection] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Handle Navbar Scroll Change
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Intersection Observer for Active Section
   useEffect(() => {
     const sections = document.querySelectorAll("section");
-    const observerOptions = { root: null, threshold: 0.4 };
+    const observerOptions = { root: null, threshold: 0.6 };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -32,10 +32,17 @@ function Header() {
     return () => sections.forEach((section) => observer.unobserve(section));
   }, []);
 
+  // Lock scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+  }, [menuOpen]);
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in ${
-        isScrolled ? "bg-neutral-800 py-[1%] shadow-md" : "bg-transparent px-20 py-[2%]"
+        isScrolled
+          ? "bg-neutral-800 py-[1%] shadow-md"
+          : "bg-transparent px-20 py-[2%]"
       }`}
     >
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
@@ -81,18 +88,15 @@ function Header() {
           menuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 md:hidden`}
       >
-        <button
-          className="text-white"
-          onClick={() => setMenuOpen(false)}
-        >
+        <button className="text-white" onClick={() => setMenuOpen(false)}>
           <BiX size={35} />
         </button>
         {[
-            { id: "hero", name: "Home" },
-            { id: "about", name: "About" },
-            { id: "projects", name: "Projects" },
-            { id: "contact", name: "Contact" },
-          ].map((item) => (
+          { id: "hero", name: "Home" },
+          { id: "about", name: "About" },
+          { id: "projects", name: "Projects" },
+          { id: "contact", name: "Contact" },
+        ].map((item) => (
           <a
             key={item.id}
             onClick={() => {

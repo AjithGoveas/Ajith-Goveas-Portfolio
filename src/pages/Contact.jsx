@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BiLogoFacebookCircle,
   BiLogoInstagram,
@@ -6,6 +6,8 @@ import {
   BiLogoGithub,
   BiLogoGmail,
 } from "react-icons/bi";
+import { db } from "../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -31,6 +33,25 @@ function Contact() {
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
+  const [socialLinks, setSocialLinks] = useState({});
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const docRef = doc(db, "socialLinks", "myLinks"); // Ensure this collection & doc exist in Firebase
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setSocialLinks(docSnap.data());
+        }
+      } catch (error) {
+        console.error("Error fetching social links:", error);
+      }
+    };
+
+    fetchLinks();
+  }, []);
+
   return (
     <section id="contact" className="text-white py-10 px-6 sm:px-12">
       <div className="max-w-5xl mx-auto bg-zinc-700 shadow-md rounded-md p-6 sm:p-8">
@@ -51,13 +72,11 @@ function Contact() {
                   <BiLogoGmail className="text-2xl text-white" />
                 </div>
                 <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`mailto:${socialLinks.gmail}`}
                   className="text-blue-500 text-sm ml-3"
                 >
                   <small className="block text-white">Mail</small>
-                  <strong>{"Not Available"}</strong>
+                  <strong>{socialLinks.gmail}</strong>
                 </a>
               </div>
             </div>
@@ -67,22 +86,27 @@ function Contact() {
               <h2 className="text-lg font-extrabold">Socials</h2>
               <div className="flex space-x-4 mt-3">
                 {[
-                  BiLogoFacebookCircle,
-                  BiLogoInstagram,
-                  BiLogoLinkedin,
-                  BiLogoGithub,
-                ].map((Icon, index) => (
-                  <a
-                    key={index}
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="h-10 w-10 rounded-full flex items-center justify-center text-gray-300 text-3xl
+                  {
+                    icon: <BiLogoFacebookCircle />,
+                    link: socialLinks.facebook,
+                  },
+                  { icon: <BiLogoInstagram />, link: socialLinks.instagram },
+                  { icon: <BiLogoLinkedin />, link: socialLinks.linkedin },
+                  { icon: <BiLogoGithub />, link: socialLinks.github },
+                ]
+                  .filter((item) => item.link)
+                  .map((item, index) => (
+                    <a
+                      key={index}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="h-10 w-10 rounded-full flex items-center justify-center text-gray-300 text-3xl
                       transition-all duration-200 ease-in hover:-translate-y-2 hover:text-white"
-                  >
-                    <Icon />
-                  </a>
-                ))}
+                    >
+                      {item.icon}
+                    </a>
+                  ))}
               </div>
             </div>
           </div>

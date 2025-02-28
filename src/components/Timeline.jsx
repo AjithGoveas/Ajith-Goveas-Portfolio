@@ -57,7 +57,9 @@ function Timeline() {
             >
               <h3 className="text-xl md:text-2xl font-bold">{project.year}</h3>
               <h4 className="text-lg md:text-xl text-blue-400 mt-2">
-                {project.title}
+                <a href={project.link} target="_blank" rel="noopener noreferrer">
+                  {project.title}
+                </a>
               </h4>
               <p className="text-gray-300 mt-2 text-sm md:text-base">
                 {project.description}

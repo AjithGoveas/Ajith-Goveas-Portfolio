@@ -1,10 +1,11 @@
-const smoothScroll = (targetId) => {
+const smoothScroll = (targetId, event = null) => {
+  if (event) event.preventDefault(); // Prevent default anchor jump behavior
+
   const target = document.getElementById(targetId);
   if (!target) return;
 
-  const startPosition = window.pageYOffset;
-  const targetPosition =
-    target.getBoundingClientRect().top + window.pageYOffset;
+  const startPosition = window.scrollY; // Use modern `window.scrollY`
+  const targetPosition = target.getBoundingClientRect().top + startPosition;
   const distance = targetPosition - startPosition;
   const duration = 800;
   let startTime = null;
@@ -17,7 +18,7 @@ const smoothScroll = (targetId) => {
     const progress = Math.min(timeElapsed / duration, 1);
     const easedProgress = easeInOutQuad(progress);
 
-    window.scrollTo(0, startPosition + distance * easedProgress);
+    window.scrollTo({ top: startPosition + distance * easedProgress });
 
     if (timeElapsed < duration) requestAnimationFrame(animation);
   };

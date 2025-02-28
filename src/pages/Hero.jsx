@@ -20,13 +20,18 @@ function Hero({ name }) {
             Nice to meet you, I'm <b className="text-blue-500">{name}</b>
           </h1>
           <p className="text-zinc-400 leading-7 md:leading-8 text-base md:text-lg mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
-            optio nihil assumenda voluptatum iure, et error aspernatur
-            praesentium repudiandae harum autem, necessitatibus mollitia nulla,
-            libero eveniet sequi. Molestiae, velit quibusdam.
+            Hello! I'm a <b className="text-white">Frontend Developer</b>{" "}
+            skilled in <b className="text-blue-400">React</b>,{" "}
+            <b className="text-blue-400">Next.js</b>, and{" "}
+            <b className="text-blue-400">Tailwind CSS</b>. I craft seamless user
+            experiences and am currently expanding my expertise into{" "}
+            <b className="text-white">Full-Stack Development</b> and{" "}
+            <b className="text-blue-400">Android app development</b> using{" "}
+            <b>Kotlin</b> and <b>Jetpack Compose</b>. Let's build something
+            exceptional together.
           </p>
           <button
-            onClick={() => smoothScroll("projects")}
+            onClick={(e) => smoothScroll("projects", e)}
             className="inline-block w-full sm:w-full md:w-full lg:w-60 mt-4 px-6 py-3 text-sm md:text-lg bg-transparent text-white font-bold border-2 border-neutral-700 rounded-lg hover:bg-neutral-700 cursor-pointer transition duration-300"
           >
             View My Projects
