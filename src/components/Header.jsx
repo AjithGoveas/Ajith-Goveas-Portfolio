@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import smoothScroll from "./SmoothScroll.jsx";
 import { BiMenu, BiX } from "react-icons/bi";
 
@@ -6,66 +6,92 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
+  const observerRef = useRef(null); // Store observer instance
 
-  // Handle Navbar Scroll Change
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  // Handle scroll to update navbar background
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 50);
   }, []);
 
-  // Intersection Observer for Active Section
   useEffect(() => {
-    const sections = document.querySelectorAll("section");
-    const observerOptions = { root: null, threshold: 0.6 };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
-    const observer = new IntersectionObserver((entries) => {
+  // Smooth scroll handler
+  const handleSmoothScroll = (id, event) => {
+    smoothScroll(id, event);
+    setTimeout(() => setActiveSection(id), 600);
+  };
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.documentElement.style.overflow = menuOpen ? "hidden" : "auto";
+  }, [menuOpen]);
+
+  const menu = [
+    { id: "hero", name: "Home" },
+    { id: "about", name: "About" },
+    { id: "projects", name: "Projects" },
+    { id: "contact", name: "Contact" },
+  ];
+
+  // Set up Intersection Observer
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5, // Trigger when 50% of the section is visible
+    };
+
+    const handleObserver = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
         }
       });
-    }, observerOptions);
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => sections.forEach((section) => observer.unobserve(section));
-  }, []);
+    observerRef.current = new IntersectionObserver(
+      handleObserver,
+      observerOptions
+    );
 
-  // Lock scroll when mobile menu is open
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
-  }, [menuOpen]);
+    // Observe all sections
+    menu.forEach((item) => {
+      const section = document.getElementById(item.id);
+      if (section) {
+        observerRef.current.observe(section);
+      }
+    });
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [menu]);
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ease-in ${
-        isScrolled
-          ? "bg-neutral-800 py-[1%] shadow-md"
-          : "bg-transparent px-20 py-[2%]"
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 shadow-md ${
+        isScrolled ? "bg-zinc-800 py-3" : "bg-transparent py-5"
       }`}
     >
-      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
-        {/* Logo */}
-        <div className="font-[Sofia] text-white text-3xl font-bold select-none">
+      <div className="container mx-auto px-6 flex justify-between items-center">
+        <div className="text-white text-3xl font-[Sofia] font-bold select-none">
           myBio
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
-          {[
-            { id: "hero", name: "Home" },
-            { id: "about", name: "About" },
-            { id: "projects", name: "Projects" },
-            { id: "contact", name: "Contact" },
-          ].map((item) => (
+          {menu.map((item) => (
             <a
               key={item.id}
-              onClick={() => smoothScroll(item.id)}
-              className={`cursor-pointer text-gray-300 text-lg transition-colors duration-300 hover:text-white ${
+              onClick={(e) => handleSmoothScroll(item.id, e)}
+              className={`px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
                 activeSection === item.id
-                  ? "text-white border-b-2 border-white pb-1"
-                  : ""
+                  ? "bg-white text-black shadow-md"
+                  : "text-gray-300 hover:bg-gray-700"
               }`}
             >
               {item.name}
@@ -73,7 +99,6 @@ function Header() {
           ))}
         </nav>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-white"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -82,36 +107,36 @@ function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation */}
       <div
-        className={`fixed top-0 right-0 h-screen w-[50%] bg-neutral-900 p-6 flex flex-col items-center space-y-6 transform ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 md:hidden`}
+        className={`fixed inset-0 bg-black bg-opacity-80 flex justify-end transition-transform duration-300 md:hidden ${
+          menuOpen ? "translate-x-0" : "translate-x-full hidden"
+        }`}
       >
-        <button className="text-white" onClick={() => setMenuOpen(false)}>
-          <BiX size={35} />
-        </button>
-        {[
-          { id: "hero", name: "Home" },
-          { id: "about", name: "About" },
-          { id: "projects", name: "Projects" },
-          { id: "contact", name: "Contact" },
-        ].map((item) => (
-          <a
-            key={item.id}
-            onClick={() => {
-              smoothScroll(item.id);
-              setMenuOpen(false);
-            }}
-            className={`cursor-pointer mt-2 text-gray-300 text-2xl transition-colors duration-300 hover:text-white ${
-              activeSection === item.id
-                ? "text-white border-b-2 border-white pb-1"
-                : ""
-            }`}
+        <div className="w-3/5 bg-neutral-900 p-6 flex flex-col items-center space-y-6">
+          <button
+            className="text-white self-end"
+            onClick={() => setMenuOpen(false)}
           >
-            {item.name}
-          </a>
-        ))}
+            <BiX size={35} />
+          </button>
+          {menu.map((item) => (
+            <a
+              key={item.id}
+              onClick={(e) => {
+                handleSmoothScroll(item.id, e);
+                setMenuOpen(false);
+              }}
+              className={`px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
+                activeSection === item.id
+                  ? "bg-white text-black shadow-md"
+                  : "text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
       </div>
     </header>
   );

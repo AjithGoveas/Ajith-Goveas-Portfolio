@@ -53,7 +53,10 @@ function Contact() {
   }, []);
 
   return (
-    <section id="contact" className="text-white py-10 px-6 sm:px-12">
+    <section
+      id="contact"
+      className="min-h-screen text-white py-10 px-6 sm:px-12"
+    >
       <div className="max-w-5xl mx-auto bg-zinc-700 shadow-md rounded-md p-6 sm:p-8">
         <div className="flex flex-col sm:grid sm:grid-cols-2 gap-10">
           {/* Left Section */}
