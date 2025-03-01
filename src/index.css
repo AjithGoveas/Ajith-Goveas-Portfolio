@@ -20,6 +20,8 @@
 }
 
 section {
-  padding: 80px 6% 50px;
-  transition: all 0.3s ease;
+  padding-top: 5rem; /* py-20 translates to padding-top and padding-bottom of 5rem each */
+  padding-bottom: 5rem;
+  padding-left: 4rem; /* px-16 translates to padding-left and padding-right of 4rem each */
+  padding-right: 4rem;
 }

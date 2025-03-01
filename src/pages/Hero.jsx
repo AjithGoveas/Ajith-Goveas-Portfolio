@@ -6,7 +6,7 @@ function Hero({ name }) {
   return (
     <section
       id="hero"
-      className="flex flex-col justify-center items-center min-h-screen bg-transparent px-4"
+      className="flex flex-col justify-center items-center min-h-screen bg-transparent"
     >
       <div className="content grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl">
         {/* Image Section */}
@@ -17,17 +17,17 @@ function Hero({ name }) {
         <div className="text p-4 flex flex-col justify-center text-center md:text-left">
           <span className="bg-white inline-block w-24 h-2 mb-4 mx-auto md:mx-0"></span>
           <h1 className="text-white leading-tight text-4xl md:text-6xl font-bold mb-4">
-            Nice to meet you, I'm <b className="text-blue-500">{name}</b>
+            Nice to meet you, I'm <strong className="text-blue-500">{name}</strong>
           </h1>
           <p className="text-zinc-400 leading-7 md:leading-8 text-base md:text-lg mb-4">
-            Hello! I'm a <b className="text-white">Frontend Developer</b>{" "}
-            skilled in <b className="text-blue-400">React</b>,{" "}
-            <b className="text-blue-400">Next.js</b>, and{" "}
-            <b className="text-blue-400">Tailwind CSS</b>. I craft seamless user
+            Hello! I'm a <strong className="text-white">Frontend Developer</strong>{" "}
+            skilled in <strong className="text-blue-400">React</strong>,{" "}
+            <strong className="text-blue-400">Next.js</strong>, and{" "}
+            <strong className="text-blue-400">Tailwind CSS</strong>. I craft seamless user
             experiences and am currently expanding my expertise into{" "}
-            <b className="text-white">Full-Stack Development</b> and{" "}
-            <b className="text-blue-400">Android app development</b> using{" "}
-            <b>Kotlin</b> and <b>Jetpack Compose</b>. Let's build something
+            <strong className="text-white">Full-Stack Development</strong> and{" "}
+            <strong className="text-blue-400">Android app development</strong> using{" "}
+            <strong>Kotlin</strong> and <strong>Jetpack Compose</strong>. Let's build something
             exceptional together.
           </p>
           <button

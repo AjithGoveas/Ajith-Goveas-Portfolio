@@ -29,10 +29,7 @@ function About() {
   }, []);
 
   return (
-    <section
-      id="about"
-      className="min-h-screen w-full py-20 bg-transparent text-white"
-    >
+    <section id="about" className="w-full py-20 bg-transparent text-white">
       <div className="container mx-auto px-6 md:px-20">
         {/* Heading */}
         <h2 className="text-4xl font-bold text-blue-500 text-center mb-10">
