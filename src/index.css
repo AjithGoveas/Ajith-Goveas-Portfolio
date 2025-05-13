@@ -19,9 +19,40 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Default styles (for larger screens) */
 section {
-  padding-top: 5rem; /* py-20 translates to padding-top and padding-bottom of 5rem each */
+  padding-top: 5rem;
   padding-bottom: 5rem;
-  padding-left: 4rem; /* px-16 translates to padding-left and padding-right of 4rem each */
+  padding-left: 4rem;
   padding-right: 4rem;
+}
+
+/* Medium screens (tablets & smaller desktops) */
+@media screen and (max-width: 1024px) {
+  section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Small screens (mobile landscape) */
+@media screen and (max-width: 768px) {
+  section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Extra small screens (mobile portrait) */
+@media screen and (max-width: 480px) {
+  section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
